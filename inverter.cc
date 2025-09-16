@@ -13,7 +13,7 @@ void createIndex(const string& file_name, int id) { //reads the file and creates
 
     //error catching 
     if(!file.is_open()) {
-        cout << "Can't open" << file_name << endl;
+        cout << "Can't open " << file_name << endl;
         return;
     }
 
@@ -45,6 +45,7 @@ void createIndex(const string& file_name, int id) { //reads the file and creates
 }
 
 void printResults() {
+    cout << endl;
     for (const auto& key: invertedIndex) {
         cout << key.first << ": ";
         for (int id: key.second) {
@@ -52,6 +53,7 @@ void printResults() {
         }
         cout << endl;
     }
+    cout << endl;
 }
 
 int main() {
