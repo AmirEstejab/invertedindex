@@ -9,12 +9,12 @@ using namespace std;
 map<string, set<int>> invertedIndex;
 
 void createIndex(const string& file_name, int id) { //reads the file and creates the inverted index
-    fstream file(file_name);
+    ifstream file(file_name.c_str());
 
     //error catching 
     if(!file.is_open()) {
-        cout << "Can't open " << file_name << endl;
-        return;
+        //skip unreadable silently
+        return; 
     }
 
     string text;
@@ -24,7 +24,7 @@ void createIndex(const string& file_name, int id) { //reads the file and creates
     while(file >> noskipws >> c) {
 
         //checks each iterating character is alpha  
-        if(isalpha(c)) {
+        if(isalpha(static_cast<unsigned char>(c))) {
             text += c;
         }
         //once complete word is made either ads to the existing key or create new key 
@@ -45,28 +45,34 @@ void createIndex(const string& file_name, int id) { //reads the file and creates
 }
 
 void printResults() {
-    cout << endl;
     for (const auto& key: invertedIndex) {
-        cout << key.first << ": ";
+        cout << key.first << ":";
         for (int id: key.second) {
-            cout << id << " ";
+            cout << " " << id;
         }
         cout << endl;
     }
-    cout << endl;
 }
 
-int main() {
-    fstream file_list("inputs.txt");   
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        return 0; // must take exactly one argument; no extra output
+    }
+
+    ifstream file_list(argv[1]);   
 
     if (!file_list.is_open()) {
-        cout << "Could not open inputs.txt" << endl;
-        return 1;
+        return 0; // silently exit if list file can't open
     }
 
     string file_name; //independent files to be read
     int id = 0; //document ID
     while (file_list >> file_name) {  // read each filename
+        ifstream test(file_name.c_str());
+        if(!test.is_open()) {
+            continue; // skip invalid file, do not increment id
+        }
+        test.close();
         createIndex(file_name, id);
         id++;
     }
@@ -74,4 +80,3 @@ int main() {
     file_list.close();
     printResults();
     return 0;
-}
