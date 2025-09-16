@@ -27,7 +27,7 @@ void createIndex(const string& file_name, int id) { //reads the file and creates
         if(isalpha(static_cast<unsigned char>(c))) {
             text += c;
         }
-        //once complete word is made either ads to the existing key or create new key 
+        //once complete word is made either adds to the existing key or create new key 
         else {
             if(!text.empty()) {
                 invertedIndex[text].insert(id);
@@ -56,21 +56,23 @@ void printResults() {
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        return 0; // must take exactly one argument; no extra output
+        //no extra output
+        return 0; 
     }
 
     ifstream file_list(argv[1]);   
 
     if (!file_list.is_open()) {
-        return 0; // silently exit if list file can't open
+        //exit silently
+        return 0; 
     }
 
     string file_name; //independent files to be read
     int id = 0; //document ID
-    while (file_list >> file_name) {  // read each filename
+    while (file_list >> file_name) {  //read each filename
         ifstream test(file_name.c_str());
         if(!test.is_open()) {
-            continue; // skip invalid file, do not increment id
+            continue; //skip invalid file, do not increment id
         }
         test.close();
         createIndex(file_name, id);
@@ -80,3 +82,4 @@ int main(int argc, char* argv[]) {
     file_list.close();
     printResults();
     return 0;
+}
